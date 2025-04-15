@@ -1,0 +1,42 @@
+# ========== Unity folders ==========
+[Libraries]
+[Libraries]
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+MemoryCaptures/
+UserSettings/
+
+# ========== Unity Asset Store ==========
+*.unitypackage
+
+# ========== VSCode ==========
+.vscode/
+
+# ========== Rider ==========
+.idea/
+*.sln
+*.csproj
+*.unityproj
+*.user
+*.pidb
+*.suo
+
+# ========== OS Files ==========
+.DS_Store
+Thumbs.db
+
+# ========== Others ==========
+*.apk
+*.aab
+
+# ========== Crash & profiler logs ==========
+*.log
+*.stacktrace
+
+# ========== Git LFS (optional, but avoid by ignoring big files) ==========
+*.dll
+*.pdb
