@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 7aa74bfddd885124d8e17cd65260f3ce
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - player: {instanceID: 0}
+  - activity: {instanceID: 0}
+  - ui: {instanceID: 0}
+  - burnout: {fileID: 11400000, guid: f857fe0416f0c4244956af3c3cad9274, type: 2}
+  - failed: {fileID: 11400000, guid: 12c710e199a0d5d4abab254d70ee261c, type: 2}
+  - passed: {fileID: 11400000, guid: 47aefcf2ed56a43469788c6b4aedeb03, type: 2}
+  - excellent: {fileID: 11400000, guid: e78a3810d2e89c348beb68238c553295, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
