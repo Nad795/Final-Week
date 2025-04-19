@@ -13,15 +13,39 @@ public class EventManager : MonoBehaviour
         int index = Random.Range(0, events.Count);
         RandomEvent randomEvent = events[index];
 
-        EventEffect(randomEvent);
-        Debug.Log("Random Event: " + randomEvent.name);
+        if(randomEvent.hasChoice)
+        {
+            Debug.Log("Butuh pilihan");
+        }
+        else
+        {
+            EventEffect(randomEvent);
+            Debug.Log("Random Event: " + randomEvent.name);
+        }
+        
     }
 
-    private void EventEffect(RandomEvent ev)
+    public void EventEffect(RandomEvent ev)
     {
         player.timeLeft -= ev.timeCost;
         player.progress += ev.progressChange;
         player.stamina += ev.staminaChange;
         player.stress += ev.stressChange;
+    }
+
+    public void ChoiceEffect(RandomEvent ev, bool accepted)
+    {
+        if(!ev.hasChoice) return;
+
+        if(accepted)
+        {
+            player.timeLeft -= ev.choiceTimeCost;
+            player.stress += ev.choiceStressChange;
+            player.stamina += ev.choiceStaminaChange;
+        }
+        else
+        {
+            EventEffect(ev);
+        }
     }
 }

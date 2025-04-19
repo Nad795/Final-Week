@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: GoOut
   m_EditorClassIdentifier: 
   randomEventName: Teman mengajak keluar
-  timeCost: 2
-  staminaChange: -10
-  stressChange: -15
+  timeCost: 0
+  staminaChange: 0
+  stressChange: 5
   progressChange: 0
   hasChoice: 1
+  choiceTimeCost: 2
+  choiceStaminaChange: -10
+  choiceStressChange: -15

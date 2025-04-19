@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48d29982439fd34981484f7ad3e2835, type: 3}
   m_Name: MaterialChange
   m_EditorClassIdentifier: 
-  randomEventName: Perubahan kisi-kisi
+  randomEventName: Perubahan kisi-kisi ujian
   timeCost: 0
   staminaChange: 0
   stressChange: 10
   progressChange: -10
   hasChoice: 0
+  choiceTimeCost: 0
+  choiceStaminaChange: 0
+  choiceStressChange: 0

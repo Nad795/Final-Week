@@ -8,5 +8,9 @@ public class RandomEvent : ScriptableObject
     public int staminaChange;
     public int stressChange;
     public int progressChange;
+
     public bool hasChoice;
+    public int choiceTimeCost;
+    public int choiceStaminaChange;
+    public int choiceStressChange;
 }
