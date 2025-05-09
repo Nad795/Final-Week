@@ -4,6 +4,7 @@ public class ActivityManager : MonoBehaviour
 {
     [SerializeField] private PlayerStatus player;
     [SerializeField] private EventManager eventManager;
+    [SerializeField] private QuizManager quizManager;
 
     public void DoActivity(Activity activity)
     {
@@ -16,15 +17,11 @@ public class ActivityManager : MonoBehaviour
 
             if (activity.activityName == "Study")
             {
-                // quizManager.StartQuiz();
+                quizManager.StartQuiz();
             }
             else if (activity.activityName == "Chat")
             {
                 eventManager.TriggerRandomEvent();
-            }
-            else
-            {
-                player.progress += activity.progressChange;
             }
 
             Debug.Log($"Melakukan {activity.activityName}");

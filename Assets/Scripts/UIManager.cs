@@ -4,11 +4,16 @@ using TMPro;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private PlayerStatus player;
-    [SerializeField] private TextMeshProUGUI dayText;
-    [SerializeField] private TextMeshProUGUI timeText;
+    [SerializeField] private TMP_Text dayText;
+    [SerializeField] private TMP_Text timeText;
     [SerializeField] private GameObject endingPanel;
-    [SerializeField] private TextMeshProUGUI endingTitleText;
-    [SerializeField] private TextMeshProUGUI endingDescText;
+    [SerializeField] private TMP_Text endingTitleText;
+    [SerializeField] private TMP_Text endingDescText;
+
+    void Start()
+    {
+        endingPanel.SetActive(false);
+    }
 
     public void UpdateUI()
     {

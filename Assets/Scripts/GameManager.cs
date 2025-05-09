@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerStatus player;
     [SerializeField] private ActivityManager activity;
     [SerializeField] private UIManager ui;
+    [SerializeField] private QuizManager quiz;
 
     [Header("Ending")]
     [SerializeField] private Ending burnout;
@@ -25,6 +26,8 @@ public class GameManager : MonoBehaviour
             player.stamina = 100;
         }
         player.stress = 0;
+
+        quiz.ResetDailyQuestions();
 
         if(player.day > 7)
         {
