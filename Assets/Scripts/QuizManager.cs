@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class QuizManager : MonoBehaviour
 {
     [SerializeField] private List<Question> questions;
-    [SerializeField] private PlayerStatus player;
+    [SerializeField] private PlayerStatus playerStatus;
+    [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private GameObject quizPanel;
     [SerializeField] private TMP_Text questionText; 
     [SerializeField] private List<Button> optionButtons;
@@ -18,8 +19,8 @@ public class QuizManager : MonoBehaviour
     private List<string> currentOptions;
     private int correctAnswerIndexAfterShuffle;
 
-    public Color normalColor = Color.white;
-    public Color selectedColor = Color.yellow;
+    public Sprite normalButton;
+    public Sprite selectedButton;
 
     private void Start()
     {
@@ -29,11 +30,11 @@ public class QuizManager : MonoBehaviour
     {
         if(!quizActive) return;
 
-        if(Input.GetKeyDown(KeyCode.DownArrow))
+        if(Input.GetKeyDown(KeyCode.UpArrow))
         {
             MoveSelection(-1);
         }
-        else if(Input.GetKeyDown(KeyCode.UpArrow))
+        else if(Input.GetKeyDown(KeyCode.DownArrow))
         {
             MoveSelection(1);
         }
@@ -45,6 +46,7 @@ public class QuizManager : MonoBehaviour
 
     public void StartQuiz()
     {
+        playerMovement.canMove = false;
         if (dailyQuestions.Count == 0)
         {
             Debug.Log("Tidak ada soal tersisa untuk hari ini!");
@@ -96,19 +98,18 @@ public class QuizManager : MonoBehaviour
 
     private void UpdateSelectionVisual()
     {
-        for(int i = 0; i < optionButtons.Count; i++)
+        for (int i = 0; i < optionButtons.Count; i++)
         {
-            var colors = optionButtons[i].colors;
-            colors.normalColor = (i == currectSelection) ? selectedColor : normalColor;
-            optionButtons[i].colors = colors;
+            var image = optionButtons[i].GetComponent<Image>();
+            image.sprite = (i == currectSelection) ? selectedButton : normalButton;
         }
     }
 
     public void SubmitAnswer()
     {
-        if(currectSelection == correctAnswerIndexAfterShuffle)
+        if (currectSelection == correctAnswerIndexAfterShuffle)
         {
-            player.progress += 10;
+            playerStatus.progress += 10;
             Debug.Log("YEYY BENARR!");
         }
         else
@@ -117,6 +118,7 @@ public class QuizManager : MonoBehaviour
         }
         quizPanel.SetActive(false);
         quizActive = false;
+        playerMovement.canMove = true;
     }
 
     private void SetupShuffledOptions()

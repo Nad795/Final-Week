@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -9,7 +11,11 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject endingPanel;
     [SerializeField] private GameObject quizPanel;
-    [SerializeField] private GameObject warningPanel;
+    [SerializeField] private GameObject eventPanel;
+    [SerializeField] private GameObject[] warningPanels;
+    [SerializeField] private GameObject fadePanel;
+
+
 
     [Header("Ending")]
     [SerializeField] private Ending burnout;
@@ -21,45 +27,31 @@ public class GameManager : MonoBehaviour
     {
         endingPanel.SetActive(false);
         quizPanel.SetActive(false);
-        warningPanel.SetActive(false);
+        eventPanel.SetActive(false);
+        fadePanel.SetActive(false);
+
+        foreach (var panel in warningPanels)
+        {
+            panel.SetActive(false);
+        }
+
         ui.UpdateUI();
     }
-    
+
     public void EndDay()
     {
-        player.day++;
-        player.timeLeft = 10;    
-        if(player.stress > 50)
-        {
-            player.stamina = 80;
-        }
-        else
-        {
-            player.stamina = 100;
-        }
-        player.stress = 0;
-
-        quiz.ResetDailyQuestions();
-
-        if(player.day > 7)
-        {
-            ShowEnding();
-        }
-        else
-        {
-            ui.UpdateUI();
-        }
+        StartCoroutine(HandleEndDay());
     }
 
     public void ShowEnding()
     {
-        if(player.IsBurnout)
+        if (player.IsBurnout)
         {
             ui.ShowEndingUI(burnout);
         }
-        else if(player.IsPassed)
+        else if (player.IsPassed)
         {
-            if(player.IsExcellent)
+            if (player.IsExcellent)
             {
                 ui.ShowEndingUI(excellent);
             }
@@ -72,5 +64,38 @@ public class GameManager : MonoBehaviour
         {
             ui.ShowEndingUI(failed);
         }
+    }
+    
+    private IEnumerator HandleEndDay()
+    {
+        fadePanel.SetActive(true);
+
+        yield return new WaitForSeconds(3f);
+
+        player.day++;
+        player.timeLeft = 10;
+
+        if (player.stress > 50)
+        {
+            player.stamina = 80;
+        }
+        else
+        {
+            player.stamina = 100;
+        }
+        player.stress = 0;
+
+        quiz.ResetDailyQuestions();
+
+        if (player.day > 7)
+        {
+            ShowEnding();
+        }
+        else
+        {
+            ui.UpdateUI();
+        }
+
+        fadePanel.SetActive(false);
     }
 }

@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: MaterialChange
   m_EditorClassIdentifier: 
   randomEventName: Perubahan kisi-kisi ujian
+  randomEventDescription: Kamu mendapat kabar bahwa dosen mengganti kisi-kisi ujian
+    secara mendadak
   timeCost: 0
   staminaChange: 0
   stressChange: 10

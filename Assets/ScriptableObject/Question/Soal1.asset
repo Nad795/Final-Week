@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54b53f4024d91aa4291be18949d01546, type: 3}
   m_Name: Soal1
   m_EditorClassIdentifier: 
-  questionText: 
+  questionText: Konsep encapsulation dalam OOP bertujuan untuk
   options:
-  - 
-  - 
-  - 
-  - 
-  correctAnswerIndex: 0
+  - Menyusun ulang urutan eksekusi
+  - 'Menyembunyikan data '
+  - Mempercepat program
+  - Fungsi banyak nama
+  correctAnswerIndex: 1

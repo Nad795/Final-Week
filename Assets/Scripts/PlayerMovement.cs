@@ -7,6 +7,8 @@ public class PlayerMovement : MonoBehaviour
     private bool isMoving;
     private Vector2 input;
     private Animator animator;
+
+    public bool canMove = true;
     public LayerMask furnituresLayer;
     public LayerMask interactableLayer;
 
@@ -17,14 +19,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if(!isMoving)
+        if (!canMove) return;
+
+        if (!isMoving)
         {
             input.x = Input.GetAxisRaw("Horizontal");
             input.y = Input.GetAxisRaw("Vertical");
 
-            if(input.x != 0) input.y = 0;
+            if (input.x != 0) input.y = 0;
 
-            if(input != Vector2.zero)
+            if (input != Vector2.zero)
             {
                 animator.SetFloat("moveX", input.x);
                 animator.SetFloat("moveY", input.y);
@@ -33,19 +37,19 @@ public class PlayerMovement : MonoBehaviour
                 targetPos.x += input.x;
                 targetPos.y += input.y;
 
-                if(IsWalkable(targetPos))
+                if (IsWalkable(targetPos))
                 {
                     StartCoroutine(Move(targetPos));
                 }
             }
         }
 
-        animator.SetBool("isMoving", isMoving);
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Interact();
         }
+
+        animator.SetBool("isMoving", isMoving);
     }
 
     public void Interact()
@@ -53,10 +57,16 @@ public class PlayerMovement : MonoBehaviour
         var facingDir = new Vector3(animator.GetFloat("moveX"), animator.GetFloat("moveY"));
         var interactPos = transform.position + facingDir;
 
+        Debug.DrawLine(transform.position, interactPos, Color.red, 1f);
+
         var collider = Physics2D.OverlapCircle(interactPos, 0.2f, interactableLayer);
         if (collider != null)
         {
-            collider.GetComponent<Interactable>()?.Interact();
+            var interactable = collider.GetComponent<Interactable>() ?? collider.GetComponentInParent<Interactable>() ?? collider.GetComponentInChildren<Interactable>();
+            if (interactable != null)
+            {
+                interactable.Interact();
+            }
         }
     }
 

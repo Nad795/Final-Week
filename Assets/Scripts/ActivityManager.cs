@@ -5,10 +5,12 @@ public class ActivityManager : MonoBehaviour
     [SerializeField] private PlayerStatus player;
     [SerializeField] private EventManager eventManager;
     [SerializeField] private QuizManager quizManager;
+    [SerializeField] private UIManager uiManager;
+    [SerializeField] private GameManager gameManager;
 
     public void DoActivity(Activity activity)
     {
-        if(player.timeLeft >= activity.timeCost)
+        if (player.timeLeft >= activity.timeCost)
         {
             player.timeLeft -= activity.timeCost;
             player.progress += activity.progressChange;
@@ -25,10 +27,13 @@ public class ActivityManager : MonoBehaviour
             }
 
             Debug.Log($"Melakukan {activity.activityName}");
-        }
-        else
-        {
-            Debug.Log("Waktu tidak cukup");
+
+            uiManager.UpdateUI();
+
+            if (player.timeLeft < 1)
+            {
+                gameManager.EndDay();
+            }
         }
     }
 }

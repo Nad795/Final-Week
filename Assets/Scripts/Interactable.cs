@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Interactable : MonoBehaviour
 {
@@ -26,7 +27,7 @@ public class Interactable : MonoBehaviour
 
     public void Interact()
     {
-        if (isPlayerInRange && activity != null && !warningPanel.IsVisible())
+        if (isPlayerInRange && activity != null && warningPanel.IsVisible())
         {
             activityManager.DoActivity(activity);
             warningPanel.Hide();
@@ -35,7 +36,6 @@ public class Interactable : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Masuk");
         if (collision.CompareTag("Player"))
         {
             isPlayerInRange = true;
@@ -45,7 +45,6 @@ public class Interactable : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log("Keluar");
         if (collision.CompareTag("Player"))
         {
             isPlayerInRange = false;

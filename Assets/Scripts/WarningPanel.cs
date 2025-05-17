@@ -14,11 +14,10 @@ public class WarningPanel : MonoBehaviour
 
     public void Show(Activity activity)
     {
-        Debug.Log("Show panel dipanggil");
         currentActivity = activity;
 
         nameText.text = activity.activityName;
-        timeText.text = $"Waktu: {activity.timeCost}";
+        timeText.text = $"Time Cost: {activity.timeCost}";
         progressText.text = $"Progress: {activity.progressChange}";
         staminaText.text = $"Stamina: {activity.staminaChange}";
         stressText.text = $"Stress: {activity.stressChange}";
