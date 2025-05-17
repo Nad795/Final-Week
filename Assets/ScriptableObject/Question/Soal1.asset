@@ -13,5 +13,9 @@ MonoBehaviour:
   m_Name: Soal1
   m_EditorClassIdentifier: 
   questionText: 
-  options: []
+  options:
+  - 
+  - 
+  - 
+  - 
   correctAnswerIndex: 0

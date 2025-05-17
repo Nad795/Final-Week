@@ -7,12 +7,24 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UIManager ui;
     [SerializeField] private QuizManager quiz;
 
+    [SerializeField] private GameObject endingPanel;
+    [SerializeField] private GameObject quizPanel;
+    [SerializeField] private GameObject warningPanel;
+
     [Header("Ending")]
     [SerializeField] private Ending burnout;
     [SerializeField] private Ending failed;
     [SerializeField] private Ending passed;
     [SerializeField] private Ending excellent;
 
+    void Start()
+    {
+        endingPanel.SetActive(false);
+        quizPanel.SetActive(false);
+        warningPanel.SetActive(false);
+        ui.UpdateUI();
+    }
+    
     public void EndDay()
     {
         player.day++;

@@ -6,41 +6,50 @@ public class Interactable : MonoBehaviour
 
     private bool isPlayerInRange = false;
     private ActivityManager activityManager;
+    private WarningPanel warningPanel;
 
     private void Start()
     {
         activityManager = FindAnyObjectByType<ActivityManager>();
+        warningPanel = GetComponentInChildren<WarningPanel>(true);
 
         if (activityManager == null)
         {
             Debug.LogError("ActivityManager tidak ditemukan di scene!");
         }
+
+        if (warningPanel == null)
+        {
+            Debug.LogError("WarningPanel tidak ditemukan di scene!");
+        }
     }
 
-    private void Update()
+    public void Interact()
     {
-        if (isPlayerInRange && Input.GetKeyDown(KeyCode.Space))
+        if (isPlayerInRange && activity != null && !warningPanel.IsVisible())
         {
-            if (activity != null && activityManager != null)
-            {
-                activityManager.DoActivity(activity);
-            }
+            activityManager.DoActivity(activity);
+            warningPanel.Hide();
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("Masuk");
         if (collision.CompareTag("Player"))
         {
             isPlayerInRange = true;
+            warningPanel.Show(activity);
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        Debug.Log("Keluar");
         if (collision.CompareTag("Player"))
         {
             isPlayerInRange = false;
+            warningPanel.Hide();
         }
     }
 }
