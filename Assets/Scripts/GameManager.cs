@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject eventPanel;
     [SerializeField] private GameObject[] warningPanels;
     [SerializeField] private GameObject fadePanel;
+    [SerializeField] private GameObject menuPanel;
 
 
 
@@ -29,6 +31,7 @@ public class GameManager : MonoBehaviour
         quizPanel.SetActive(false);
         eventPanel.SetActive(false);
         fadePanel.SetActive(false);
+        menuPanel.SetActive(true);
 
         foreach (var panel in warningPanels)
         {
@@ -43,8 +46,9 @@ public class GameManager : MonoBehaviour
         StartCoroutine(HandleEndDay());
     }
 
-    public void ShowEnding()
+    public IEnumerator ShowEnding()
     {
+        fadePanel.SetActive(false);
         if (player.IsBurnout)
         {
             ui.ShowEndingUI(burnout);
@@ -64,6 +68,12 @@ public class GameManager : MonoBehaviour
         {
             ui.ShowEndingUI(failed);
         }
+
+        yield return new WaitForSeconds(5f);
+
+        player.ResetStatus();
+        ui.UpdateUI();
+        menuPanel.SetActive(true);
     }
     
     private IEnumerator HandleEndDay()
@@ -87,14 +97,12 @@ public class GameManager : MonoBehaviour
 
         quiz.ResetDailyQuestions();
 
-        if (player.day > 7)
+        if (player.day > 7 || player.stress >= 100)
         {
-            ShowEnding();
+            StartCoroutine(ShowEnding());
+            yield break;
         }
-        else
-        {
-            ui.UpdateUI();
-        }
+        ui.UpdateUI();
 
         fadePanel.SetActive(false);
     }

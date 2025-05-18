@@ -9,15 +9,17 @@ public class QuizManager : MonoBehaviour
     [SerializeField] private PlayerStatus playerStatus;
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private GameObject quizPanel;
-    [SerializeField] private TMP_Text questionText; 
+    [SerializeField] private TextMeshProUGUI questionText; 
     [SerializeField] private List<Button> optionButtons;
 
     private Question currentQuestion;
-    private int currectSelection = 0;
+    private int currentSelection = 0;
     private bool quizActive = false;
     private List<Question> dailyQuestions;
     private List<string> currentOptions;
     private int correctAnswerIndexAfterShuffle;
+    private System.Action<bool> onQuizCompleted;
+
 
     public Sprite normalButton;
     public Sprite selectedButton;
@@ -44,19 +46,19 @@ public class QuizManager : MonoBehaviour
         }
     }
 
-    public void StartQuiz()
+    public void StartQuiz(System.Action<bool> callback)
     {
+        onQuizCompleted = callback;
         playerMovement.canMove = false;
         if (dailyQuestions.Count == 0)
         {
-            Debug.Log("Tidak ada soal tersisa untuk hari ini!");
             return;
         }
 
         quizPanel.SetActive(true);
         quizActive = true;
         currentQuestion = GetRandomQuestion();
-        currectSelection = 0;
+        currentSelection = 0;
         questionText.text = currentQuestion.questionText;
 
         for(int i = 0; i < optionButtons.Count; i++)
@@ -83,15 +85,15 @@ public class QuizManager : MonoBehaviour
 
     private void MoveSelection(int direction)
     {
-        currectSelection += direction;
+        currentSelection += direction;
 
-        if(currectSelection < 0)
+        if(currentSelection < 0)
         {
-            currectSelection = optionButtons.Count - 1;
+            currentSelection = optionButtons.Count - 1;
         }
-        else if(currectSelection >= optionButtons.Count)
+        else if(currentSelection >= optionButtons.Count)
         {
-            currectSelection = 0;
+            currentSelection = 0;
         }
         UpdateSelectionVisual();
     }
@@ -101,15 +103,15 @@ public class QuizManager : MonoBehaviour
         for (int i = 0; i < optionButtons.Count; i++)
         {
             var image = optionButtons[i].GetComponent<Image>();
-            image.sprite = (i == currectSelection) ? selectedButton : normalButton;
+            image.sprite = (i == currentSelection) ? selectedButton : normalButton;
         }
     }
 
     public void SubmitAnswer()
     {
-        if (currectSelection == correctAnswerIndexAfterShuffle)
+        bool isCorrect = currentSelection == correctAnswerIndexAfterShuffle;
+        if (isCorrect)
         {
-            playerStatus.progress += 10;
             Debug.Log("YEYY BENARR!");
         }
         else
@@ -119,6 +121,7 @@ public class QuizManager : MonoBehaviour
         quizPanel.SetActive(false);
         quizActive = false;
         playerMovement.canMove = true;
+        onQuizCompleted?.Invoke(isCorrect);
     }
 
     private void SetupShuffledOptions()

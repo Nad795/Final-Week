@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GoOut
   m_EditorClassIdentifier: 
   randomEventName: Teman mengajak keluar
-  randomEventDescription: Temanmu mengajakmu untuk pergi keluar, apakah kamu menerima
+  randomEventDescription: Temanmu mengajakmu untuk pergi keluar, apakah kamu terima
     ajakannya atau kamu tolak ?
   timeCost: 0
   staminaChange: 0

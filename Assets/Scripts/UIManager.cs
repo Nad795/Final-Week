@@ -5,7 +5,8 @@ using System;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] private PlayerStatus player;
+    [SerializeField] private PlayerStatus playerStatus;
+    [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private TextMeshProUGUI dayText;
     [SerializeField] private TextMeshProUGUI timeText;
 
@@ -22,12 +23,12 @@ public class UIManager : MonoBehaviour
 
     public void UpdateUI()
     {
-        dayText.text = "Day " + player.day;
-        timeText.text = "Time Left: " + player.timeLeft + "h";
+        dayText.text = "Day " + playerStatus.day;
+        timeText.text = "Time Left: " + playerStatus.timeLeft + "h";
 
-        progressBar.value = player.progress;
-        staminaBar.value = player.stamina;
-        stressBar.value = player.stress;
+        progressBar.value = playerStatus.progress;
+        staminaBar.value = playerStatus.stamina;
+        stressBar.value = playerStatus.stress;
 
         progressText.text = "Progress: " + progressBar.value + "%";
         staminaText.text = "Stamina: " + staminaBar.value + "%";
@@ -36,6 +37,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowEndingUI(Ending ending)
     {
+        playerMovement.canMove = false;
         endingPanel.SetActive(true);
         endingTitleText.text = ending.endingTitle;
         endingDescText.text = ending.endingDescription;

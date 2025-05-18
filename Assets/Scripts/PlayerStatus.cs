@@ -11,4 +11,13 @@ public class PlayerStatus : MonoBehaviour
     public bool IsBurnout => stress >= 100;
     public bool IsPassed => progress >= 75;
     public bool IsExcellent => progress >= 90;
+
+    public void ResetStatus()
+    {
+        day = 1;
+        timeLeft = 10;
+        stamina = 100;
+        stress = 0;
+        progress = 0;
+    }
 }

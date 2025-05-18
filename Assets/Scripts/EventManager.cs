@@ -1,18 +1,27 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using TMPro;
+using System.Collections;
 
 public class EventManager : MonoBehaviour
 {
     [SerializeField] private PlayerStatus playerStatus;
     [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private UIManager uiManager;
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private GameObject eventPanel;
+    [SerializeField] private TextMeshProUGUI eventTitle;
+    [SerializeField] private TextMeshProUGUI eventDescription;
     [SerializeField] private List<RandomEvent> events;
     [SerializeField] private List<Button> optionButtons;
 
-    private int currectSelection = 0;
+    private int currentSelection = 0;
     private bool eventActive = false;
     private RandomEvent currentEvent;
+    private System.Action deferredEffect;
+    private bool isClosing = false;
+
 
     public Sprite normalButton;
     public Sprite selectedButton;
@@ -21,23 +30,32 @@ public class EventManager : MonoBehaviour
     {
         if (events.Count == 0) return;
 
-        int index = Random.Range(0, events.Count);
+        int index = UnityEngine.Random.Range(0, events.Count);
         RandomEvent randomEvent = events[index];
         currentEvent = randomEvent;
 
-        Debug.Log(currentEvent);
+        eventTitle.text = currentEvent.randomEventName;
+        eventDescription.text = currentEvent.randomEventDescription;
 
-        if (randomEvent.hasChoice)
+        playerMovement.canMove = false;
+        eventActive = true;
+        eventPanel.SetActive(true);
+
+        foreach (var btn in optionButtons)
         {
-            playerMovement.canMove = false;
-            eventActive = true;
-            eventPanel.SetActive(true);
+            btn.gameObject.SetActive(randomEvent.hasChoice);
+        }
+
+        if (currentEvent.hasChoice)
+        {
+            currentSelection = 0;
             UpdateSelectionVisual();
-            Debug.Log("Butuh pilihan");
+            deferredEffect = () => ChoiceEffect(currentEvent, currentSelection == 0);
         }
         else
         {
-            EventEffect(randomEvent);
+            deferredEffect = () => EventEffect(currentEvent);
+            StartCoroutine(CloseEventPanelAfterDelay(2f));
             Debug.Log("Random Event: " + randomEvent.name);
         }
     }
@@ -46,9 +64,14 @@ public class EventManager : MonoBehaviour
     public void EventEffect(RandomEvent ev)
     {
         playerStatus.timeLeft -= ev.timeCost;
-        playerStatus.progress += ev.progressChange;
-        playerStatus.stamina += ev.staminaChange;
-        playerStatus.stress += ev.stressChange;
+        playerStatus.progress = Mathf.Clamp(playerStatus.progress + ev.progressChange, 0, 100);
+        playerStatus.stamina = Mathf.Clamp(playerStatus.stamina + ev.staminaChange, 0, 100);
+        playerStatus.stress = Mathf.Clamp(playerStatus.stress + ev.stressChange, 0, 100);
+
+        if (playerStatus.timeLeft <= 0)
+        {
+            gameManager.EndDay();
+        }
     }
 
     public void ChoiceEffect(RandomEvent ev, bool accepted)
@@ -58,18 +81,42 @@ public class EventManager : MonoBehaviour
         if (accepted)
         {
             playerStatus.timeLeft -= ev.choiceTimeCost;
-            playerStatus.stress += ev.choiceStressChange;
-            playerStatus.stamina += ev.choiceStaminaChange;
+            playerStatus.stress = Mathf.Clamp(playerStatus.stress + ev.choiceStressChange, 0, 100);
+            playerStatus.stamina = Mathf.Clamp(playerStatus.stamina + ev.choiceStaminaChange, 0, 100);
         }
         else
         {
             EventEffect(ev);
+            return;
         }
+
+        if (playerStatus.timeLeft <= 0)
+        {
+            gameManager.EndDay();
+        }
+    }
+
+    private void CloseEventPanel()
+    {
+        if (isClosing) return;
+        isClosing = true;
+
+        eventPanel.SetActive(false);
+        eventActive = false;
+        playerMovement.canMove = true;
+
+        deferredEffect?.Invoke();
+        deferredEffect = null;
+
+        uiManager.UpdateUI();
+
+        StartCoroutine(HandleEndDayIfNeeded());
+        isClosing = false;
     }
 
     void Update()
     {
-        if(!eventActive) return;
+        if (!eventActive) return;
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
@@ -87,15 +134,15 @@ public class EventManager : MonoBehaviour
 
     private void MoveSelection(int direction)
     {
-        currectSelection += direction;
+        currentSelection += direction;
 
-        if (currectSelection < 0)
+        if (currentSelection < 0)
         {
-            currectSelection = optionButtons.Count - 1;
+            currentSelection = optionButtons.Count - 1;
         }
-        else if (currectSelection >= optionButtons.Count)
+        else if (currentSelection >= optionButtons.Count)
         {
-            currectSelection = 0;
+            currentSelection = 0;
         }
         UpdateSelectionVisual();
     }
@@ -105,16 +152,31 @@ public class EventManager : MonoBehaviour
         for (int i = 0; i < optionButtons.Count; i++)
         {
             var image = optionButtons[i].GetComponent<Image>();
-            image.sprite = (i == currectSelection) ? selectedButton : normalButton;
+            image.sprite = (i == currentSelection) ? selectedButton : normalButton;
         }
     }
-    
+
     public void SubmitAnswer()
     {
-        ChoiceEffect(currentEvent, currectSelection == 0);
-        eventPanel.SetActive(false);
-        eventActive = false;
-        playerMovement.canMove = true;
+        if (currentEvent == null) return;
+
+        deferredEffect = () => ChoiceEffect(currentEvent, currentSelection == 0);
+
+        CloseEventPanel();
     }
 
+    private IEnumerator CloseEventPanelAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        CloseEventPanel();
+    }
+    
+    private IEnumerator HandleEndDayIfNeeded()
+    {
+        yield return null;
+        if (playerStatus.timeLeft == 0)
+        {
+            gameManager.EndDay();
+        }
+    }
 }
