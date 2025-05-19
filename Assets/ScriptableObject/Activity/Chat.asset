@@ -15,5 +15,5 @@ MonoBehaviour:
   activityName: Chat
   timeCost: 1
   staminaChange: 0
-  stressChange: -5
+  stressChange: -10
   progressChange: 0

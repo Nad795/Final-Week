@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
         player.ResetStatus();
         ui.UpdateUI();
         menuPanel.SetActive(true);
+        endingPanel.SetActive(false);
     }
     
     private IEnumerator HandleEndDay()
@@ -81,6 +82,11 @@ public class GameManager : MonoBehaviour
         fadePanel.SetActive(true);
 
         yield return new WaitForSeconds(3f);
+
+        if (player.day > 7 || player.stress >= 100)
+        {
+            StartCoroutine(ShowEnding());
+        }
 
         player.day++;
         player.timeLeft = 10;
@@ -96,12 +102,6 @@ public class GameManager : MonoBehaviour
         player.stress = 0;
 
         quiz.ResetDailyQuestions();
-
-        if (player.day > 7 || player.stress >= 100)
-        {
-            StartCoroutine(ShowEnding());
-            yield break;
-        }
         ui.UpdateUI();
 
         fadePanel.SetActive(false);

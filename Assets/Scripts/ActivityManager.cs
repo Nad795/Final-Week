@@ -41,7 +41,7 @@ public class ActivityManager : MonoBehaviour
 
         uiManager.UpdateUI();
 
-        if (player.timeLeft <= 0)
+        if (player.timeLeft <= 0 || player.stress <= 0)
         {
             gameManager.EndDay();
         }
@@ -60,7 +60,7 @@ public class ActivityManager : MonoBehaviour
             player.stress = Mathf.Clamp(player.stress + currentActivity.stressChange, 0, 100);
             uiManager.UpdateUI();
             
-            if (player.timeLeft <= 0)
+            if (player.timeLeft <= 0 || player.stress <= 0)
             {
                 gameManager.EndDay();
             }

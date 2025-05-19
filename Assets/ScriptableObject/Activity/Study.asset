@@ -15,5 +15,5 @@ MonoBehaviour:
   activityName: Study
   timeCost: 2
   staminaChange: -15
-  stressChange: 10
+  stressChange: 25
   progressChange: 10
