@@ -67,11 +67,6 @@ public class EventManager : MonoBehaviour
         playerStatus.progress = Mathf.Clamp(playerStatus.progress + ev.progressChange, 0, 100);
         playerStatus.stamina = Mathf.Clamp(playerStatus.stamina + ev.staminaChange, 0, 100);
         playerStatus.stress = Mathf.Clamp(playerStatus.stress + ev.stressChange, 0, 100);
-
-        if (playerStatus.timeLeft <= 0)
-        {
-            gameManager.EndDay();
-        }
     }
 
     public void ChoiceEffect(RandomEvent ev, bool accepted)
@@ -88,11 +83,6 @@ public class EventManager : MonoBehaviour
         {
             EventEffect(ev);
             return;
-        }
-
-        if (playerStatus.timeLeft <= 0)
-        {
-            gameManager.EndDay();
         }
     }
 
@@ -174,7 +164,7 @@ public class EventManager : MonoBehaviour
     private IEnumerator HandleEndDayIfNeeded()
     {
         yield return null;
-        if (playerStatus.timeLeft == 0)
+        if (playerStatus.timeLeft <= 0 || playerStatus.stress >= 100)
         {
             gameManager.EndDay();
         }

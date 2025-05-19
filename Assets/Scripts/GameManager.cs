@@ -83,12 +83,12 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(3f);
 
+        player.day++;
         if (player.day > 7 || player.stress >= 100)
         {
             StartCoroutine(ShowEnding());
         }
-
-        player.day++;
+        
         player.timeLeft = 10;
 
         if (player.stress > 50)
