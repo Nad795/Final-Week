@@ -4,7 +4,7 @@ using UnityEngine;
 public class RandomEvent : ScriptableObject
 {
     public string randomEventName;
-    public string randomEventDescription;
+    [TextArea] public string randomEventDescription;
     public int timeCost;
     public int staminaChange;
     public int stressChange;

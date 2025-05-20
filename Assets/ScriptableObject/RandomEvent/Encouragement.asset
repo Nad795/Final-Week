@@ -13,7 +13,14 @@ MonoBehaviour:
   m_Name: Encouragement
   m_EditorClassIdentifier: 
   randomEventName: Teman memberi semangat
-  randomEventDescription: Temanmu memberi semangat dan kamu menjadi semakin termotivasi
+  randomEventDescription: 'Temanmu memberi semangat dan kamu menjadi semakin termotivasi
+
+
+    Progress:
+    10
+
+
+    Stress: -10'
   timeCost: 0
   staminaChange: 0
   stressChange: -10
